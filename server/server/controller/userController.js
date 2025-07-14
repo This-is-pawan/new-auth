@@ -241,3 +241,18 @@ if (!user) {
   await user.save();
 res.json({message:`user verify successfully`,success:true,})
 }
+exports.getData=async (req,res) => {
+ const id=req.userId
+try {
+  const user=await User.findById(id);
+ if(!user){
+  res.json({message:`user doesn't exist `,success:false})
+ }
+res.json({message:`user exist success `,success:true,
+ user:user.otpExpire
+}) 
+} catch (error) {
+ res.json({message:error,success:false})
+}
+
+}

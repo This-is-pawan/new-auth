@@ -8,7 +8,10 @@ const { router } = require('./router/userRouter');
 connection()
 server.use(express.json())
 server.use(cookieParser());
-server.use(cors());
+server.use(cors({
+  origin: "http://localhost:3000", 
+  credentials: true
+}));
 server.use('/api',router)
 const port=process.env.PORT
 server.listen(port,()=>{
