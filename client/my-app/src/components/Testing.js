@@ -1,80 +1,39 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const Testing = () => {
-  const [otp, setOtp] = useState(new Array(6).fill(''));
-  const inputsRef = useRef([]);
+  const timerRef = useRef(null);
 
-  const handleChange = (element, index) => {
-    const value = element.value.replace(/[^0-9]/g, '');
-     // allow only numbers
-     // console.log(value);
-     
-    if (!value) return;
-    const newOtp = [...otp];
-  
-    newOtp[index] = value;
-    
-    setOtp(newOtp);
+  useEffect(() => {
+    const targetTime = new Date("2025-07-15T04:19:13.448Z").getTime(); // UTC time
+    const getRemainingSeconds = () => Math.max(0, Math.floor((targetTime - new Date().getTime()) / 1000));
 
+    let duration = getRemainingSeconds();
 
-    // Move focus to next input
-    if (index < 5) {
-      inputsRef.current[index + 1].focus();
-    }
-  };
+    const intervalId = setInterval(() => {
+      const minutes = Math.floor(duration / 60);
+      const seconds = duration % 60;
 
-  const handleKeyDown = (e, index) => {
-    if (e.key === 'Backspace') {
-      const newOtp = [...otp];
-      newOtp[index] = '';
-      setOtp(newOtp);
-
-
-      // Move to previous input
-      if (index > 0) {
-        inputsRef.current[index - 1].focus();
+      if (timerRef.current) {
+        timerRef.current.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
       }
-    }
-  };
 
-  const handlePaste = (e) => {
-    e.preventDefault();
-    const pasteData = e.clipboardData.getData('text').trim().slice(0, 6);
-    const pasteArray = pasteData.split('');
-    const newOtp = [...otp];
-
-    pasteArray.forEach((char, index) => {
-      if (index < 6 && /^[0-9]$/.test(char)) {
-        newOtp[index] = char;
-        inputsRef.current[index].value = char;
+      if (duration === 0) {
+        clearInterval(intervalId);
+        if (timerRef.current) {
+          timerRef.current.textContent = "OTP expired";
+        }
       }
-    });
-  
-    setOtp(newOtp);
 
-    // Focus next empty input
-    const nextIndex = pasteArray.length < 6 ? pasteArray.length : 5;
-    inputsRef.current[nextIndex].focus();
-  };
+      duration--;
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
-   <div className='shadow w-full h-[200px] bg-pink-200 '>
-
-    <form className="flex gap-2 justify-center relative top-20 " onPaste={handlePaste}>
-      {otp.map((_, index) => (
-       <input
-       key={index}
-       type="text"
-       maxLength={1}
-       className="w-10 h-10 text-center border rounded"
-          value={otp[index]}
-          onChange={(e) => handleChange(e.target, index)}
-          onKeyDown={(e) => handleKeyDown(e, index)}
-          ref={(el) => (inputsRef.current[index] = el)}
-        />
-      ))}
-    </form>
-          </div>
+    <div className='relative top-[20rem]'>
+      <p id="otp-timer" className='text-3xl' ref={timerRef}></p>
+    </div>
   );
 };
 
