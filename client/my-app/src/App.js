@@ -9,7 +9,7 @@ import Login from './components/Login'
 import OTP from './components/OTP'
 // import Testing from './components/Testing'
 import Dashboard from './components/Dashboard'
-import Testing from './components/Testing'
+// import Testing from './components/Testing'
 const App = () => {
   return (
     <div>
@@ -21,7 +21,7 @@ const App = () => {
 <Route path='/login' element={<Login/>}/>
 <Route path='/otp' element={<OTP/>}/>
 <Route path='/dashboard' element={<Dashboard/>}/>
-<Route path='/testing' element={<Testing/>}/>
+{/* <Route path='/testing' element={<Testing/>}/> */}
       </Routes>
   
 

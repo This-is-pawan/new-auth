@@ -13,7 +13,7 @@ export const UserProvider = ({ children }) => {
   const [Data, setData] = useState();
   useEffect(()=>{
     getdata()
-  })
+  },[])
   const getdata=async()=>{
 
     try {
