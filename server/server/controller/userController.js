@@ -5,7 +5,7 @@ const cookie = require("cookie-parser");
 const { User } = require("../models/userModel");
 const nodemailer = require("nodemailer");
 
-// Mail transporter setup
+// Mail transporter setup 
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
